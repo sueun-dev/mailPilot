@@ -1,0 +1,92 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Environment files
+.env
+.env.local
+
+# Application data
+data/token.json
+data/thread_memory.json
+data/*.json
+data/marketing_sent.json
+
+# Credentials and sensitive files (keep sample files)
+config/credentials.json
+config/customer_emails.txt
+config/customer_list.txt
+config/*.txt
+
+# User-specific data
+data/sent_emails.json
+data/customer_*.json
+data/user_*.json
+
+# Marketing and outbound data
+data/marketing_*.json
+data/outbound_*.json
+
+# Any file containing sensitive keywords
+*password*
+*secret*
+*private*
+*apikey*
+*api_key*
+
+# Logs
+*.log
+logs/
+
+# Local settings
+.claude/settings.local.json
+
+# OS
+Thumbs.db
+
+# uv
+.uv/
+uv.lock

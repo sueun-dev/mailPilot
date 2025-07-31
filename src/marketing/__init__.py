@@ -1,0 +1,1 @@
+"""Marketing module for outbound email campaigns."""
