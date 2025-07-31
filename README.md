@@ -1,5 +1,545 @@
 # Mail Pilot 📧
 
+> Intelligent Email Marketing & Auto-Response System powered by Gmail API and ChatGPT
+
+[![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Code Coverage](https://img.shields.io/badge/coverage-72%25-yellow.svg)](https://codecov.io/)
+[![Tests](https://img.shields.io/badge/tests-83%20passed-brightgreen.svg)](tests/)
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [System Requirements](#system-requirements)
+- [Installation Guide](#installation-guide)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Security](#security)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 🚀 Overview
+
+Mail Pilot is an automated email marketing and response system that integrates **Gmail API** with **OpenAI ChatGPT** to streamline outbound marketing campaigns and customer interactions. It promotes the YouTube Shorts Auto Generator product, generates intelligent context-aware responses to customer inquiries, and manages Zoom meeting scheduling - a complete sales automation toolkit.
+
+### Why Mail Pilot?
+
+- **🚀 Marketing Automation**: Bulk send promotional emails for YouTube Shorts Auto Generator
+- **👤 Personalized Outreach**: Customized marketing messages with customer names
+- **⏰ Time Savings**: Automate repetitive email responses for increased efficiency
+- **💬 Consistent Communication**: AI-powered responses maintain consistent tone and quality
+- **🧠 Context Awareness**: Intelligent responses based on conversation history
+- **📅 Meeting Scheduling**: Built-in Zoom meeting proposals and tracking
+
+## ✨ Key Features
+
+### Core Features
+
+- **🚀 Outbound Marketing**
+  - YouTube Shorts Auto Generator product promotional email campaigns
+  - Personalized marketing message generation (includes customer names)
+  - Sending history tracking and duplicate prevention
+  - Campaign-based management
+
+- **🤖 AI-Powered Email Responses**
+  - Natural response generation using OpenAI GPT-4
+  - Intelligent answers to product-related questions
+  - Personalized messages considering conversation context
+  - Natural product feature highlighting
+
+- **📧 Gmail Integration**
+  - Secure Gmail API integration with OAuth2
+  - Automatic detection and processing of unread emails
+  - Thread-based conversation management
+  - Customer email filtering (processes important customers only)
+
+- **🗓️ Zoom Meeting Management**
+  - 15-minute meeting proposals for product demos
+  - Demo session scheduling tracking
+  - Duplicate booking prevention
+  - Automatic meeting confirmation detection
+
+- **✅ Approval Workflow**
+  - User review for all response drafts
+  - Intuitive approve/reject interface with Rich terminal UI
+  - Korean input support (UTF-8 encoding)
+  - Safe input handling
+
+- **💾 Data Management**
+  - Thread-specific conversation context storage
+  - Marketing campaign sending history tracking
+  - JSON-based persistent storage
+  - 10 email limit on first run, processes only new emails thereafter
+
+### Advanced Features
+
+- **🔐 Security**
+  - Secure API key management via environment variables
+  - Automatic sensitive information masking
+  - OAuth2 token auto-refresh
+  - `.env` file git commit prevention
+
+- **📊 Logging System**
+  - Structured JSON logging
+  - Environment-specific log levels
+  - Automatic sensitive data filtering
+  - Third-party library log control
+
+- **🧪 Testing**
+  - 83 comprehensive unit tests
+  - 72% code coverage
+  - API testing with mock objects
+  - pytest-based test suite
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Python 3.12+** - Leveraging latest Python features
+- **Google API Python Client** - Gmail API integration
+- **OpenAI Python SDK** - ChatGPT API integration
+- **Rich** - Enhanced terminal UI
+
+### Development Tools
+- **pytest** - Testing framework
+- **pytest-cov** - Code coverage measurement
+- **pytest-mock** - Mock object support
+- **uv** - Fast Python package manager
+
+## 💻 System Requirements
+
+### Required
+- Python 3.12 or higher
+- macOS (Keychain support recommended) or Linux/Windows
+- Internet connection
+- Gmail account
+- OpenAI API account
+
+### Recommended
+- Memory: 4GB RAM or more
+- Storage: 100MB or more
+- Terminal: UTF-8 and 256-color support
+
+## 📦 Installation Guide
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/sueun-dev/mailPilot.git
+cd mailPilot
+```
+
+### 2. Python Environment Setup
+
+```bash
+# Check Python version
+python --version  # Requires 3.12+
+
+# Install uv (recommended)
+pip install uv
+
+# Create and activate virtual environment
+uv venv
+source .venv/bin/activate  # macOS/Linux
+# or
+.venv\Scripts\activate  # Windows
+```
+
+### 3. Install Dependencies
+
+```bash
+# Using uv (recommended - fast installation)
+uv pip install -e .
+
+# Install with development dependencies
+uv pip install -e ".[dev]"
+```
+
+### 4. Gmail API Setup
+
+#### Google Cloud Console Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select existing project
+3. Enable Gmail API:
+   - Navigate to "APIs & Services" → "Library"
+   - Search for "Gmail API" and enable it
+
+#### Create OAuth2 Credentials
+
+1. Go to "APIs & Services" → "Credentials"
+2. Click "Create Credentials" → "OAuth client ID"
+3. Application type: Select "Desktop app"
+4. Enter name (e.g., "Mail Pilot Desktop")
+5. Download JSON file
+6. Save as `config/credentials.json`
+
+#### Configure OAuth Consent Screen
+
+1. Go to "APIs & Services" → "OAuth consent screen"
+2. Fill in required information:
+   - App name: Mail Pilot
+   - User support email
+   - Developer contact information
+3. Add required scopes:
+   - `https://www.googleapis.com/auth/gmail.readonly`
+   - `https://www.googleapis.com/auth/gmail.send`
+   - `https://www.googleapis.com/auth/gmail.modify`
+
+### 5. OpenAI API Key Setup
+
+#### Set Environment Variables
+
+```bash
+# Copy .env.sample to .env
+cp .env.sample .env
+
+# Edit .env file
+vi .env  # or use your preferred editor
+
+# Set OPENAI_API_KEY
+OPENAI_API_KEY=sk-your-api-key-here
+```
+
+**Important**: Never commit `.env` file to git!
+
+### 6. Customer Email List Setup
+
+Edit `config/customer_emails.txt` to add customer information:
+
+```
+# Customer Email Addresses
+# Format: Name <email@example.com>
+
+John Doe <john.doe@example.com>
+Jane Smith <jane.smith@company.com>
+Kim Chulsoo <chulsoo@example.kr>
+```
+
+## 🎯 Usage
+
+### Basic Execution
+
+```bash
+# Run with UTF-8 environment (recommended)
+./run.sh
+
+# Or run directly
+export PYTHONIOENCODING=utf-8
+uv run python src/main.py
+```
+
+### First Run
+
+1. Gmail authentication browser window opens
+2. Log in with your Google account
+3. Grant Gmail access permissions to Mail Pilot
+4. Return to terminal after authentication completes
+
+### Main Menu
+
+```
+🤖 Email Marketing & Auto-Responder System
+
+Options:
+1. Send marketing emails (YouTube Shorts Auto Generator)
+2. Check for new emails and responses
+3. View active threads
+4. Exit
+
+Select option (1-4): 
+```
+
+### Workflow
+
+#### 1. Send Marketing Emails
+
+1. Select option 1
+2. Review personalized emails for each customer
+3. Choose approve (y) or reject (n)
+4. History automatically saved after sending
+
+#### 2. Process Customer Responses
+
+1. Select option 2
+2. Customer emails filtered and displayed
+3. Review AI-generated response drafts
+4. Auto-send upon approval
+
+#### 3. Conversation Management
+
+- Option 3 to view ongoing conversations
+- Track Zoom meeting schedule status
+- Check conversation history
+
+### Advanced Usage
+
+#### Marketing Campaign Management
+
+```python
+# Modify campaign template in src/marketing/outbound.py
+def generate_marketing_email(self, name: str) -> Dict[str, str]:
+    subject = f"Hi {name} - Your Custom Subject"
+    body = f"""Your custom marketing message..."""
+```
+
+#### Customer Filtering Settings
+
+```python
+# Change number of emails to process on first run
+max_results = 20  # Default: 10
+```
+
+## 📁 Project Structure
+
+```
+mailPilot/
+├── config/                      # Configuration files
+│   ├── credentials.json        # Gmail OAuth2 credentials (gitignored)
+│   ├── customer_emails.txt     # Customer email list
+│   └── HOW_TO_GET_CREDENTIALS.md  # Gmail API setup guide
+│
+├── data/                        # Runtime data (gitignored)
+│   ├── token.json              # OAuth2 access token
+│   ├── thread_memory.json      # Conversation history storage
+│   ├── marketing_sent.json     # Marketing sending history
+│   └── last_processed.json     # Last processing state
+│
+├── scripts/                     # Utility scripts
+│   └── keychain_env.py         # macOS Keychain helper
+│
+├── src/                         # Source code
+│   ├── approval/               # Email approval interface
+│   │   └── interface.py        # Rich UI implementation
+│   │
+│   ├── chatgpt/                # ChatGPT integration
+│   │   └── client.py           # OpenAI API client
+│   │
+│   ├── gmail/                  # Gmail API integration
+│   │   └── client.py           # Gmail API client
+│   │
+│   ├── marketing/              # Marketing features
+│   │   └── outbound.py         # Outbound email campaigns
+│   │
+│   ├── storage/                # Data storage
+│   │   └── thread_memory.py    # Conversation history management
+│   │
+│   ├── utils/                  # Utility modules
+│   │   └── logging_config.py   # Logging configuration
+│   │
+│   └── main.py                 # Main application
+│
+├── tests/                       # Test suite
+│   ├── test_*.py               # Unit test files
+│   └── ...
+│
+├── .gitignore                   # Git ignore file
+├── CLAUDE.md                    # AI development guidelines
+├── pyproject.toml               # Project configuration
+├── pytest.ini                   # Test configuration
+├── README.md                    # This document
+├── run.sh                       # Run script
+└── uv.lock                      # Dependency lock file
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Set in `.env` file:
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `OPENAI_API_KEY` | OpenAI API key | - | ✅ |
+| `PYTHONIOENCODING` | Python encoding | `utf-8` | ✅ |
+| `MAILPILOT_ENV` | Execution environment | `development` | ❌ |
+| `MAILPILOT_LOG_DIR` | Log directory | `logs/` | ❌ |
+
+### Customer Email Format
+
+`config/customer_emails.txt`:
+```
+# Format: Name <email@example.com>
+John Doe <john@example.com>
+Jane Smith <jane@company.com>
+```
+
+### Marketing Sending History
+
+`data/marketing_sent.json`:
+```json
+{
+  "youtube_shorts": {
+    "email@example.com": {
+      "sent_at": "2025-07-20T15:10:11.612105",
+      "status": "sent"
+    }
+  }
+}
+```
+
+## 🧪 Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+uv run pytest
+
+# Verbose output
+uv run pytest -v
+
+# Code coverage
+uv run pytest --cov=src --cov-report=term-missing
+
+# Generate HTML report
+uv run pytest --cov=src --cov-report=html
+```
+
+### Test Statistics
+- **Total Tests**: 83
+- **Code Coverage**: 72%
+- **Test Duration**: ~1 second
+
+## 🔒 Security
+
+### API Key Management
+
+#### Using Environment Variables
+```bash
+# Store API key in .env file
+echo "OPENAI_API_KEY=sk-..." >> .env
+
+# Set directly as environment variable (temporary)
+export OPENAI_API_KEY="sk-..."
+```
+
+### Security Policies
+
+1. **Prohibited**:
+   - No committing `.env` files to git
+   - No hardcoding API keys
+   - No logging sensitive information
+
+2. **Required**:
+   - Use environment variables
+   - OAuth2 token auto-refresh
+   - HTTPS-only communication
+
+### Logging Security
+- Automatic API key and token masking
+- Partial email address masking
+- Sensitive information filtering
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### 1. UnicodeDecodeError
+
+**Solution**:
+```bash
+# Use run.sh script
+./run.sh
+
+# Or set environment variables
+export PYTHONIOENCODING=utf-8
+export LC_ALL=en_US.UTF-8
+```
+
+#### 2. Gmail API Authentication Failure
+
+**Solution**:
+```bash
+# Regenerate token
+rm data/token.json
+uv run python src/main.py
+```
+
+#### 3. OpenAI API Error
+
+**Solution**:
+```bash
+# Check API key
+echo $OPENAI_API_KEY
+
+# Check .env file
+cat .env | grep OPENAI_API_KEY
+
+# Check API usage
+# https://platform.openai.com/usage
+```
+
+#### 4. Logging Error
+
+**Symptom**: OpenAI/httpx library logging errors
+
+**Solution**: Already fixed - SafeMessageAdapter handles automatically
+
+### Debugging Tips
+
+```bash
+# Enable verbose logging
+export MAILPILOT_ENV=development
+
+# Check logs
+tail -f logs/mailpilot.log
+```
+
+## 🤝 Contributing
+
+Thank you for contributing to the Mail Pilot project!
+
+### Contribution Guidelines
+
+1. Create an issue
+2. Fork & clone
+3. Create branch: `feature/feature-name`
+4. Write code (use type hints)
+5. Write tests
+6. Commit & PR
+
+### Coding Style
+
+- Follow PEP 8
+- Use type hints
+- Write docstrings
+- Maintain 70%+ test coverage
+
+## 📄 License
+
+This project is distributed under the MIT License.
+
+## 🙏 Acknowledgments
+
+- Google Gmail API team
+- OpenAI ChatGPT team
+- Python community
+- All contributors
+
+## 📞 Contact
+
+- **Developer**: Sueun Cho
+- **Email**: sueun.dev@gmail.com
+- **Bug Reports**: [GitHub Issues](https://github.com/sueun-dev/mailPilot/issues)
+
+---
+
+<div align="center">
+  Made with ❤️ for YouTube Shorts Auto Generator
+</div>
+
+
+---
+
+
+# Mail Pilot 📧
+
 > Gmail API와 ChatGPT를 활용한 지능형 이메일 마케팅 및 자동 응답 시스템
 
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
@@ -130,7 +670,7 @@ Mail Pilot은 **Gmail API**와 **OpenAI ChatGPT**를 통합하여 아웃바운�
 ### 1. 저장소 클론
 
 ```bash
-git clone https://github.com/yourusername/mailPilot.git
+git clone https://github.com/sueun-dev/mailPilot.git
 cd mailPilot
 ```
 
@@ -526,7 +1066,7 @@ Mail Pilot 프로젝트에 기여해 주셔서 감사합니다!
 
 - **개발자**: Sueun Cho
 - **이메일**: sueun.dev@gmail.com
-- **버그 리포트**: [GitHub Issues](https://github.com/yourusername/mailPilot/issues)
+- **버그 리포트**: [GitHub Issues](https://github.com/sueun-dev/mailPilot/issues)
 
 ---
 
